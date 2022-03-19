@@ -1,12 +1,4 @@
-#include <iostream>
-#include <fstream>
-#include <chrono>
-#include <mpi.h>
-#include <cassert>
-
 #include "fonctions.hpp"
-
-#define VERBOSE 0
 
 int main(int argc, char **argv) {
 
@@ -27,6 +19,7 @@ int main(int argc, char **argv) {
     const size_t nn = n * n;
     const size_t mn = m * n;
     const size_t data_size = sizeof(int);
+    const int nb_zero = (int) (0.1 * n);
 
     Time debut;
 
@@ -40,27 +33,29 @@ int main(int argc, char **argv) {
 
 #if VERBOSE
         // Print Matrix
-        cout << "Matrix : " << endl;
+        std::cout << "Matrix : " << std::endl;
         for (size_t i = 0; i < n; ++i) {
-            cout << "\t";
-            for (size_t j = 0; j < n; ++j) cout << matrix[i * n + j] << " ";
-            cout << "" << endl;
+            std::cout << "\t";
+            for (size_t j = 0; j < n; ++j) std::cout << matrix[i * n + j] << " ";
+            std::cout << "" << std::endl;
         }
 #endif
 
         vectors = new int[mn];
-        for (size_t i = 0; i < m; i++) generate_vector(n, vectors + (i * n), rand() % (n / 2));
+        for (size_t i = 0; i < m; i++) generate_vector(n, vectors + (i * n), rand() % nb_zero);
 
 #if VERBOSE
         // Print vectors
-        cout << "Vectors : " << endl;
+        std::cout << "Vectors : " << std::endl;
         for (size_t i = 0; i < m; ++i) {
-            cout << "\tVector " << i <<" [ ";
-            for (size_t j = 0; j < n; ++j) cout << vectors[i * n + j] << " ";
-            cout << "]" << endl;
+            std::cout << "\tVector " << i <<" [ ";
+            for (size_t j = 0; j < n; ++j) std::cout << vectors[i * n + j] << " ";
+            std::cout << "]" << std::endl;
         }
 #endif
     }
+    // début du chrono
+    if (pid == root) debut = NOW;
 
     MPI_Bcast(matrix, nn, MPI_INT, root, MPI_COMM_WORLD);
 
@@ -85,17 +80,17 @@ int main(int argc, char **argv) {
 #if VERBOSE
     // Print received vectors
     for (size_t i = 0; i < sz; ++i) {
-        cout << "PID: " << pid << "; Vector " << i <<" [ ";
-        for (size_t j = 0; j < n; ++j) cout << batch[i * n + j] << " ";
-        cout << "]" << endl;
+        std::cout << "PID: " << pid << "; Vector " << i <<" [ ";
+        for (size_t j = 0; j < n; ++j) std::cout << batch[i * n + j] << " ";
+        std::cout << "]" << std::endl;
     }
 #endif
 
-    if (pid == root) debut = NOW;
 
+#pragma omp parallel for
     for (size_t i = 0; i < sz; ++i) {
         int result[n];
-        matrix_vector(n, matrix, batch + (i * n), result);
+        matrix_vector_omp(n, matrix, batch + (i * n), result);
         memcpy(batch + (i * n), result, n * data_size);
     }
 
@@ -122,11 +117,11 @@ int main(int argc, char **argv) {
 
 #if VERBOSE
         // Print result
-        cout << "Result:" << endl;
+        std::cout << "Result:" << std::endl;
         for (size_t i = 0; i < m; i++) {
-            cout << "\tVector " << i << " [ ";
-            for (size_t j = 0; j < n; j++) cout << vectors[i * n + j] << " ";
-            cout << "]" << endl;
+            std::cout << "\tVector " << i << " [ ";
+            for (size_t j = 0; j < n; j++) std::cout << vectors[i * n + j] << " ";
+            std::cout << "]" << std::endl;
         }
 #endif
     }
