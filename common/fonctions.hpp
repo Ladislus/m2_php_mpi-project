@@ -22,6 +22,7 @@
  * /!\ This is not a good practice, but it's a simple one
  * /!\ DO NOT ADD A SEMICOLON AFTER THE CODE INSIDE THE MACRO !
  */
+/* Became useless as MPI check by default
 #define MPI_ABORT_CODE 55
 #define CHECK(code) {                                                                                                                                                       \
                         int __ret = (code);                                                                                                                                 \
@@ -29,6 +30,7 @@
                             std::cerr << "MPI code '" << #code << "' (" << __FILE__ << "::" << __LINE__ << ") errored with code " << __ret << ", aborting !" << std::endl;  \
                             MPI_Abort(MPI_COMM_WORLD, MPI_ABORT_CODE); }                                                                                                    \
                     }
+*/
 
 #define NOW std::chrono::system_clock::now()
 

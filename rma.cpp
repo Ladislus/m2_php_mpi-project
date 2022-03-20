@@ -54,28 +54,28 @@ int main(int argc, char **argv) {
         srand(time(nullptr));
         for (size_t i = 0; i < nn; i++) matrix[i] = rand() % 20;
 
-#if VERBOSE
-        // Print Matrix
-        std::cout << "Matrix : " << std::endl;
-        for (size_t i = 0; i < n; ++i) {
-            std::cout << "\t";
-            for (size_t j = 0; j < n; ++j) std::cout << matrix[i * n + j] << " ";
-            std::cout << "" << std::endl;
-        }
-#endif
+        LOG(
+            // Print Matrix
+            std::clog << "Matrix : " << std::endl;
+            for (size_t i = 0; i < n; ++i) {
+                std::clog << "\t";
+                for (size_t j = 0; j < n; ++j) std::clog << matrix[i * n + j] << " ";
+                std::clog << std::endl;
+            }
+        )
 
         vectors = new int[mn];
         for (size_t i = 0; i < m; i++) generate_vector(n, vectors + (i * n), rand() % (n / 2));
 
-#if VERBOSE
-        // Print vectors
-        std::cout << "Vectors : " << std::endl;
-        for (size_t i = 0; i < m; ++i) {
-            std::cout << "\tVector " << i <<" [ ";
-            for (size_t j = 0; j < n; ++j) std::cout << vectors[i * n + j] << " ";
-            std::cout << "]" << std::endl;
-        }
-#endif
+        LOG(
+            // Print vectors
+            std::clog << "Vectors : " << std::endl;
+            for (size_t i = 0; i < m; ++i) {
+                std::clog << "\tVector " << i <<" [ ";
+                for (size_t j = 0; j < n; ++j) std::clog << vectors[i * n + j] << " ";
+                std::clog << "]" << std::endl;
+            }
+        )
     }
 
     MPI_Win_fence(MPI_MODE_NOPRECEDE, window);
@@ -106,14 +106,14 @@ int main(int argc, char **argv) {
         // Copy vectors into batch
         memcpy(batch, vectors + displs[pid] * data_size, count[pid] * data_size);
 
-#if VERBOSE
-    // Print received vectors
-    for (size_t i = 0; i < sz; ++i) {
-        std::cout << "PID: " << pid << "; Vector " << i <<" [ ";
-        for (size_t j = 0; j < n; ++j) std::cout << batch[i * n + j] << " ";
-        std::cout << "]" << std::endl;
-    }
-#endif
+    LOG(
+        // Print received vectors
+        for (size_t i = 0; i < sz; ++i) {
+            std::clog << "PID: " << pid << "; Vector " << i <<" [ ";
+            for (size_t j = 0; j < n; ++j) std::clog << batch[i * n + j] << " ";
+            std::clog << "]" << std::endl;
+        }
+    )
 
     MPI_Win_fence(0, window);
 
@@ -138,7 +138,7 @@ int main(int argc, char **argv) {
 
     if (pid == root) {
         std::chrono::duration<double> elapsed_seconds = NOW - debut;
-        std::cout << "Temps d'exécution : " << elapsed_seconds.count() << std::endl;
+        std::cout << "Temps d'exécution: " << elapsed_seconds.count() << "s" << std::endl;
     }
 
     MPI_Win_fence(MPI_MODE_NOSUCCEED, window);
@@ -155,15 +155,15 @@ int main(int argc, char **argv) {
         }
         f.close();
 
-#if VERBOSE
-        // Print result
-        std::cout << "Result:" << std::endl;
-        for (size_t i = 0; i < m; i++) {
-            std::cout << "\tVector " << i << " [ ";
-            for (size_t j = 0; j < n; j++) std::cout << vectors[i * n + j] << " ";
-            std::cout << "]" << std::endl;
-        }
-#endif
+        LOG(
+            // Print result
+            std::clog << "Result:" << std::endl;
+            for (size_t i = 0; i < m; i++) {
+                std::clog << "\tVector " << i << " [ ";
+                for (size_t j = 0; j < n; j++) std::clog << vectors[i * n + j] << " ";
+                std::clog << "]" << std::endl;
+            }
+        )
     }
 
     MPI_Win_free(&window);

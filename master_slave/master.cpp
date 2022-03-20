@@ -12,7 +12,7 @@ int main(int argc, char **argv) {
     MPI_Comm_rank(MPI_COMM_WORLD, &pid);
     assert(pid == 0);
 
-    LOG(std::cout << "Master " << pid << "/" << nprocs - 1 << " started" << std::endl)
+    LOG(std::clog << "Master " << pid << "/" << nprocs - 1 << " started" << std::endl)
 
     // Read CLI arguments
     const unsigned int n = atoi(argv[1]);
@@ -25,12 +25,12 @@ int main(int argc, char **argv) {
 
     LOG(
         if (pid == root) {
-            std::cout << "\tn = " << n << std::endl;
-            std::cout << "\tm = " << m << std::endl;
-            std::cout << "\troot = " << root << std::endl;
-            std::cout << "\tnslave = " << nslave << std::endl;
-            std::cout << "\tname = '" << name << "'" << std::endl;
-            std::cout << "\tslave_name = '" << slave_name << "'" << std::endl;
+            std::clog << "\tn = " << n << std::endl;
+            std::clog << "\tm = " << m << std::endl;
+            std::clog << "\troot = " << root << std::endl;
+            std::clog << "\tnslave = " << nslave << std::endl;
+            std::clog << "\tname = '" << name << "'" << std::endl;
+            std::clog << "\tslave_name = '" << slave_name << "'" << std::endl;
         }
     )
 
@@ -39,7 +39,7 @@ int main(int argc, char **argv) {
     const size_t mn = m * n;
 
     // Spawn slaves & merge Comm
-    LOG(std::cout << "[M" << pid << "] spawning " << nslave << " slaves" << std::endl)
+    LOG(std::clog << "[M" << pid << "] spawning " << nslave << " slaves" << std::endl)
 
     // Spawning slaves & merging Comm
     int intrapid = -1;
@@ -48,35 +48,40 @@ int main(int argc, char **argv) {
                    MPI_INFO_NULL, root, MPI_COMM_WORLD,
                    &intercom, MPI_ERRCODES_IGNORE);
     LOG(
-        std::cout << "[M" << pid << "] spawning " << nslave << " slaves ✔" << std::endl;
-        std::cout << "[M" << pid << "] merging comm" << std::endl
+        std::clog << "[M" << pid << "] spawning " << nslave << " slaves ✔" << std::endl;
+        std::clog << "[M" << pid << "] merging comm" << std::endl
     )
+
     // FIXME: Infinite wait here, should match slave.cpp:39
     // Depending on which PC (and thus maybe which MPI implementation) I use, it might or might not work
     MPI_Intercomm_merge(intercom, 0, &intracom);
     MPI_Comm_rank(intracom, &intrapid);
+
     LOG(
-        std::cout << "[M" << pid << "] merging comm ✔" << std::endl;
-        std::cout << "[M" << pid << "] Generating matrix" << std::endl
+        std::clog << "[M" << pid << "] merging comm ✔" << std::endl;
+        std::clog << "[M" << pid << "] Generating matrix" << std::endl
     )
 
     // Initialize & broadcast matrix
     int *matrix = new int[nn];
     srand(time(nullptr));
     for (size_t i = 0; i < nn; i++) matrix[i] = rand() % MATRIX_MAX;
+
     LOG(
-        std::cout << "[M" << pid << "] Generating matrix ✔" << std::endl;
-        for (size_t i = 0; i < n; ++i) {
-            std::cout << "\t" << i << ": [ ";
-            for (size_t j = 0; j < n; ++j) std::cout << matrix[i * n + j] << " ";
-            std::cout << "]" << std::endl;
-        }
-        std::cout << "Broadcasting the matring to slaves" << std::endl
+        std::clog << "[M" << pid << "] Generating matrix ✔" << std::endl;
+//        for (size_t i = 0; i < n; ++i) {
+//            std::clog << "\t" << i << ": [ ";
+//            for (size_t j = 0; j < n; ++j) std::clog << matrix[i * n + j] << " ";
+//            std::clog << "]" << std::endl;
+//        }
+        std::clog << "Broadcasting the matring to slaves" << std::endl
     )
+
     MPI_Bcast(matrix, nn, MPI_INT, root, intracom);
+
     LOG(
-        std::cout << "Broadcasting the matring to slaves ✔" << std::endl;
-        std::cout << "[M" << pid << "] genrating vectors" << std::endl
+        std::clog << "Broadcasting the matring to slaves ✔" << std::endl;
+        std::clog << "[M" << pid << "] genrating vectors" << std::endl
     )
 
     // initialize result and offset
@@ -86,14 +91,15 @@ int main(int argc, char **argv) {
     // Initialize and generate vectors
     int *vectors = new int[mn];
     for (size_t i = 0; i < m; i++) generate_vector(n, vectors + (i * n), rand() % (n / 2));
+
     LOG(
-        std::cout << "[M" << pid << "] genrating vectors ✔" << std::endl;
-        for (size_t i = 0; i < m; ++i) {
-            std::cout << "\tVector " << i <<" [ ";
-            for (size_t j = 0; j < n; ++j) std::cout << vectors[i * n + j] << " ";
-            std::cout << "]" << std::endl;
-        }
-        std::cout << "[M" << pid << "] allocating windows" << std::endl
+        std::clog << "[M" << pid << "] genrating vectors ✔" << std::endl;
+//        for (size_t i = 0; i < m; ++i) {
+//            std::clog << "\tVector " << i <<" [ ";
+//            for (size_t j = 0; j < n; ++j) std::clog << vectors[i * n + j] << " ";
+//            std::clog << "]" << std::endl;
+//        }
+        std::clog << "[M" << pid << "] allocating windows" << std::endl
     )
 
     // Allocate windows
@@ -103,34 +109,34 @@ int main(int argc, char **argv) {
     MPI_Win_create(&offset, 1, sizeof(int), MPI_INFO_NULL, intracom, &offset_win);
 
     LOG(
-        std::cout << "[M" << pid << "] allocating windows ✔" << std::endl;
-        std::cout << "[M" << pid << "] waiting for first fence" << std::endl
+        std::clog << "[M" << pid << "] allocating windows ✔" << std::endl;
+        std::clog << "[M" << pid << "] waiting for first fence" << std::endl
     )
 
     // Fence to wait for windows initialization
     MPI_Win_fence(MPI_MODE_NOPRECEDE, vectors_win);
 
     LOG(
-        std::cout << "[M" << pid << "] waiting for first fence ✔" << std::endl;
-        std::cout << "[M" << pid << "] starting chrono" << std::endl
+        std::clog << "[M" << pid << "] waiting for first fence ✔" << std::endl;
+        std::clog << "[M" << pid << "] starting chrono" << std::endl
     )
 
-    // Start chrono while salves fetch & compute
+    // Start chrono while slaves fetch & compute
     Time debut = NOW;
 
     LOG(
-        std::cout << "[M" << pid << "] starting chrono ✔" << std::endl;
-        std::cout << "[M" << pid << "] waiting for second fence" << std::endl
+        std::clog << "[M" << pid << "] starting chrono ✔" << std::endl;
+        std::clog << "[M" << pid << "] waiting for second fence" << std::endl
     )
 
     // Fence to wait for all vectors to be computed
     MPI_Win_fence(MPI_MODE_NOSUCCEED, results_win);
 
-    LOG(std::cout << "[M" << pid << "] computing done" << std::endl)
+    LOG(std::clog << "[M" << pid << "] computing done" << std::endl)
 
     // Display computation time
     std::chrono::duration<double> elapsed_seconds = NOW - debut;
-    std::cout << "Temps d'exécution : " << elapsed_seconds.count() << std::endl;
+    std::clog << "Temps d'exécution: " << elapsed_seconds.count() << "s" << std::endl;
 
     // Open provided file
     std::fstream f(name, std::fstream::out);
@@ -149,14 +155,14 @@ int main(int argc, char **argv) {
     }
     f.close();
 
-    LOG(
-        std::cout << "Result:" << std::endl;
-        for (size_t i = 0; i < m; i++) {
-            std::cout << "\tVector " << i << " [ ";
-            for (size_t j = 0; j < n; j++) std::cout << results[i * n + j] << " ";
-            std::cout << "]" << std::endl;
-        }
-    )
+//    LOG(
+//        std::clog << "Result:" << std::endl;
+//        for (size_t i = 0; i < m; i++) {
+//            std::clog << "\tVector " << i << " [ ";
+//            for (size_t j = 0; j < n; j++) std::clog << results[i * n + j] << " ";
+//            std::clog << "]" << std::endl;
+//        }
+//    )
 
     // Free memory
     MPI_Comm_free(&intercom);
