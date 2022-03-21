@@ -91,6 +91,7 @@ int main(int argc, char **argv) {
         // Get offset from master
         MPI_Win_lock(MPI_LOCK_EXCLUSIVE, root, 0, offset_win);
         MPI_Get(&offset, 1, MPI_INT, root, 0, 1, MPI_INT, offset_win);
+		MPI_Win_flush_local(root, offset_win);
         // If offset is -1, something went wrong with the previous MPI_Get, but MPI_SUCCESS was returned
         LOG(
 //            std::clog << "[S" << pid << "] getting offset from master ✔" << std::endl;
