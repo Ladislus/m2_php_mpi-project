@@ -136,7 +136,7 @@ int main(int argc, char **argv) {
 
     // Display computation time
     std::chrono::duration<double> elapsed_seconds = NOW - debut;
-    std::clog << "Temps d'exécution: " << elapsed_seconds.count() << "s" << std::endl;
+    std::cout << "Temps d'exécution: " << elapsed_seconds.count() << "s" << std::endl;
 
     // Open provided file
     std::fstream f(name, std::fstream::out);

@@ -139,7 +139,7 @@ int main(int argc, char **argv) {
 
     if (pid == root) {
         std::chrono::duration<double> elapsed_seconds = NOW - debut;
-        std::clog << "Temps d'exécution: " << elapsed_seconds.count() << "s" << std::endl;
+        std::cout << "Temps d'exécution: " << elapsed_seconds.count() << "s" << std::endl;
     }
 
     MPI_Win_fence(MPI_MODE_NOSUCCEED, window);
