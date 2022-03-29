@@ -1,0 +1,10 @@
+Temps d'exécution: 0.000971465s
+Temps d'exécution: 0.000830356s
+Temps d'exécution: 0.000851324s
+Temps d'exécution: 0.004394s
+Temps d'exécution: 0.0107233s
+Temps d'exécution: 0.000817175s
+Temps d'exécution: 0.0178072s
+Temps d'exécution: 0.00369703s
+Temps d'exécution: 0.00109055s
+Temps d'exécution: 0.000706104s
