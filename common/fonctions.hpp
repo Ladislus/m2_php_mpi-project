@@ -7,7 +7,7 @@
 #include <cassert>
 #include <mpi.h>
 
-#include "config.h"
+#define VERBOSE 0
 
 
 // Macro to include debug logs at compile time
