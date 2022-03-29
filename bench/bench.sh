@@ -18,19 +18,19 @@ do
     echo "############ Iteration $i ############\n"
     
     echo "	mpi"
-    mpirun -hostfile ../hostfile mpi1 $N $M 0 res.txt >> "mpi1-$N-$M.txt" 
+    mpirun -hostfile hostfile mpi1 $N $M 0 res.txt >> "mpi1-$N-$M.txt" 
     
     echo "	omp"
-    mpirun -hostfile ../hostfile omp $N $M 0 res.txt >> "omp-$N-$M.txt" 
+    mpirun -hostfile hostfile omp $N $M 0 res.txt >> "omp-$N-$M.txt" 
     
     echo "	rma"
-    mpirun -hostfile ../hostfile rma $N $M 0 res.txt >> "rma-$N-$M.txt" 
+    mpirun -hostfile hostfile rma $N $M 0 res.txt >> "rma-$N-$M.txt" 
     
     echo "	rma_omp"
-    mpirun -hostfile ../hostfile rma_omp $N $M 0 res.txt >> "rma-omp-$N-$M.txt" 
+    mpirun -hostfile hostfile rma_omp $N $M 0 res.txt >> "rma-omp-$N-$M.txt" 
     
     echo "	master"
-    mpirun -np 1 -hostfile ../hostfile master $N $M 2 0 8 res.txt slave >> "ms-$N-$M.txt" 
+    mpirun -np 1 -hostfile hostfile master $N $M 2 0 8 res.txt slave >> "ms-$N-$M.txt" 
 done
 
 $N=1024
@@ -42,19 +42,19 @@ do
     echo "############ Iteration $i ############\n"
 
     echo "	mpi"
-    mpirun -hostfile ../hostfile mpi1 $N $M 0 res.txt >> "mpi1-$N-$M.txt" 
+    mpirun -hostfile hostfile mpi1 $N $M 0 res.txt >> "mpi1-$N-$M.txt" 
     
     echo "	omp"
-    mpirun -hostfile ../hostfile omp $N $M 0 res.txt >> "omp-$N-$M.txt" 
+    mpirun -hostfile hostfile omp $N $M 0 res.txt >> "omp-$N-$M.txt" 
     
     echo "	rma"
-    mpirun -hostfile ../hostfile rma $N $M 0 res.txt >> "rma-$N-$M.txt" 
+    mpirun -hostfile hostfile rma $N $M 0 res.txt >> "rma-$N-$M.txt" 
     
     echo "	rma_omp"
-    mpirun -hostfile ../hostfile rma_omp $N $M 0 res.txt >> "rma-omp-$N-$M.txt" 
+    mpirun -hostfile hostfile rma_omp $N $M 0 res.txt >> "rma-omp-$N-$M.txt" 
     
     echo "	master"
-    mpirun -np 1 -hostfile ../hostfile master $N $M 2 0 8 res.txt slave >> "ms-$N-$M.txt" 
+    mpirun -np 1 -hostfile hostfile master $N $M 2 0 8 res.txt slave >> "ms-$N-$M.txt" 
 done
 
 $N=4096
@@ -66,19 +66,19 @@ do
     echo "############ Iteration $i ############\n"
 
     echo "	mpi"
-    mpirun -hostfile ../hostfile mpi1 $N $M 0 res.txt >> "mpi1-$N-$M.txt" 
+    mpirun -hostfile hostfile mpi1 $N $M 0 res.txt >> "mpi1-$N-$M.txt" 
     
     echo "	omp"
-    mpirun -hostfile ../hostfile omp $N $M 0 res.txt >> "omp-$N-$M.txt" 
+    mpirun -hostfile hostfile omp $N $M 0 res.txt >> "omp-$N-$M.txt" 
     
     echo "	rma"
-    mpirun -hostfile ../hostfile rma $N $M 0 res.txt >> "rma-$N-$M.txt" 
+    mpirun -hostfile hostfile rma $N $M 0 res.txt >> "rma-$N-$M.txt" 
     
     echo "	rma_omp"
-    mpirun -hostfile ../hostfile rma_omp $N $M 0 res.txt >> "rma-omp-$N-$M.txt" 
+    mpirun -hostfile hostfile rma_omp $N $M 0 res.txt >> "rma-omp-$N-$M.txt" 
     
     echo "	master"
-    mpirun -np 1 -hostfile ../hostfile master $N $M 2 0 8 res.txt slave >> "ms-$N-$M.txt" 
+    mpirun -np 1 -hostfile hostfile master $N $M 2 0 8 res.txt slave >> "ms-$N-$M.txt" 
 done
 
 $N=256
@@ -90,19 +90,19 @@ do
     echo "############ Iteration $i ############\n"
 
     echo "	mpi"
-    mpirun -hostfile ../hostfile mpi1 $N $M 0 res.txt >> "mpi1-$N-$M.txt" 
+    mpirun -hostfile hostfile mpi1 $N $M 0 res.txt >> "mpi1-$N-$M.txt" 
     
     echo "	omp"
-    mpirun -hostfile ../hostfile omp $N $M 0 res.txt >> "omp-$N-$M.txt" 
+    mpirun -hostfile hostfile omp $N $M 0 res.txt >> "omp-$N-$M.txt" 
     
     echo "	rma"
-    mpirun -hostfile ../hostfile rma $N $M 0 res.txt >> "rma-$N-$M.txt" 
+    mpirun -hostfile hostfile rma $N $M 0 res.txt >> "rma-$N-$M.txt" 
     
     echo "	rma_omp"
-    mpirun -hostfile ../hostfile rma_omp $N $M 0 res.txt >> "rma-omp-$N-$M.txt" 
+    mpirun -hostfile hostfile rma_omp $N $M 0 res.txt >> "rma-omp-$N-$M.txt" 
     
     echo "	master"
-    mpirun -np 1 -hostfile ../hostfile master $N $M 2 0 8 res.txt slave >> "ms-$N-$M.txt" 
+    mpirun -np 1 -hostfile hostfile master $N $M 2 0 8 res.txt slave >> "ms-$N-$M.txt" 
 done
 
 $N=1024
@@ -114,19 +114,19 @@ do
     echo "############ Iteration $i ############\n"
 
     echo "	mpi"
-    mpirun -hostfile ../hostfile mpi1 $N $M 0 res.txt >> "mpi1-$N-$M.txt" 
+    mpirun -hostfile hostfile mpi1 $N $M 0 res.txt >> "mpi1-$N-$M.txt" 
     
     echo "	omp"
-    mpirun -hostfile ../hostfile omp $N $M 0 res.txt >> "omp-$N-$M.txt" 
+    mpirun -hostfile hostfile omp $N $M 0 res.txt >> "omp-$N-$M.txt" 
     
     echo "	rma"
-    mpirun -hostfile ../hostfile rma $N $M 0 res.txt >> "rma-$N-$M.txt" 
+    mpirun -hostfile hostfile rma $N $M 0 res.txt >> "rma-$N-$M.txt" 
     
     echo "	rma_omp"
-    mpirun -hostfile ../hostfile rma_omp $N $M 0 res.txt >> "rma-omp-$N-$M.txt" 
+    mpirun -hostfile hostfile rma_omp $N $M 0 res.txt >> "rma-omp-$N-$M.txt" 
     
     echo "	master"
-    mpirun -np 1 -hostfile ../hostfile master $N $M 2 0 8 res.txt slave >> "ms-$N-$M.txt" 
+    mpirun -np 1 -hostfile hostfile master $N $M 2 0 8 res.txt slave >> "ms-$N-$M.txt" 
 done
 
 $N=4096
@@ -138,17 +138,17 @@ do
     echo "############ Iteration $i ############\n"
 
     echo "	mpi"
-    mpirun -hostfile ../hostfile mpi1 $N $M 0 res.txt >> "mpi1-$N-$M.txt" 
+    mpirun -hostfile hostfile mpi1 $N $M 0 res.txt >> "mpi1-$N-$M.txt" 
     
     echo "	omp"
-    mpirun -hostfile ../hostfile omp $N $M 0 res.txt >> "omp-$N-$M.txt" 
+    mpirun -hostfile hostfile omp $N $M 0 res.txt >> "omp-$N-$M.txt" 
     
     echo "	rma"
-    mpirun -hostfile ../hostfile rma $N $M 0 res.txt >> "rma-$N-$M.txt" 
+    mpirun -hostfile hostfile rma $N $M 0 res.txt >> "rma-$N-$M.txt" 
     
     echo "	rma_omp"
-    mpirun -hostfile ../hostfile rma_omp $N $M 0 res.txt >> "rma-omp-$N-$M.txt" 
+    mpirun -hostfile hostfile rma_omp $N $M 0 res.txt >> "rma-omp-$N-$M.txt" 
     
     echo "	master"
-    mpirun -np 1 -hostfile ../hostfile master $N $M 2 0 8 res.txt slave >> "ms-$N-$M.txt" 
+    mpirun -np 1 -hostfile hostfile master $N $M 2 0 8 res.txt slave >> "ms-$N-$M.txt" 
 done
