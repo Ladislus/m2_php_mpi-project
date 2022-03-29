@@ -11,18 +11,18 @@ Project made during the second year of Master's Degree in Computer Science (IMIS
 
 ## Launch
 To launch the project, you can use the custom targets created in the CMakeLists.txt file (`run_XXX`, ie: `run_vanilla`, `run_omp`, ...). 
-Arguments and number of processes are controlled by the following variables: 
- - **PROC_QUANTITY**: Define the number of processes to launch (-np option of MPI).
- - **DEFAULT_ARGUMENTS**: Define the default arguments for all targets except Master/Slave.
- - **MS_ARGUMENTS**: Define the arguments for Master/Slave targets (-np is ignored and set explicitly set 1, as multiple masters are useless).
+Arguments and number of processes are controlled by the following variables:  
+ - **PROC_QUANTITY**: Define the number of processes to launch (-np option of MPI).  
+ - **DEFAULT_ARGUMENTS**: Define the default arguments for all targets except Master/Slave.  
+ - **MS_ARGUMENTS**: Define the arguments for Master/Slave targets (-np is ignored and set explicitly set 1, as multiple masters are useless).  
 
 ## Codes
-The project contains 5 versions:
- - [Vanilla](vanilla.cpp): The vanilla version of the project, using MPI 1 (Scatterv/Gatherv).
- - [OMP](omp.cpp): The vanilla version of the project, using MPI 1 (Scatterv/Gatherv) extended with OMP.
- - [RMA](rma.cpp): The RMA version of the project, using MPI windows.
- - [RMA_OMP](rma_omp.cpp): The RMA version of the project, using MPI windows extended with OMP.
- - [Master](master_slave/master.cpp) / [Slave](master_slave/slave.cpp): The MPI 3 version of the project, using MPI Master/Slave technique (MPI_Comm_spawn) with RMA windows.
+The project contains 5 versions:  
+ - [Vanilla](vanilla.cpp): The vanilla version of the project, using MPI 1 (Scatterv/Gatherv).  
+ - [OMP](omp.cpp): The vanilla version of the project, using MPI 1 (Scatterv/Gatherv) extended with OMP.  
+ - [RMA](rma.cpp): The RMA version of the project, using MPI windows.  
+ - [RMA_OMP](rma_omp.cpp): The RMA version of the project, using MPI windows extended with OMP.  
+ - [Master](master_slave/master.cpp) / [Slave](master_slave/slave.cpp): The MPI 3 version of the project, using MPI Master/Slave technique (MPI_Comm_spawn) with RMA windows.  
 
 The code contained in the [common](common) folder is shared between all versions.  
 We didn't make a Master/Slave version using MPI 1 because we didn't thing it would be useful.  
