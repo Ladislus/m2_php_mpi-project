@@ -9,7 +9,6 @@
 
 #define VERBOSE 0
 
-
 // Macro to include debug logs at compile time
 #define LOG(code) if (VERBOSE) { code; }
 

@@ -12,10 +12,10 @@ mpic++ -o slave -I ../common/ ../master_slave/slave.cpp ../common/fonctions.cpp
 N=256
 M=16
 
-echo "Running with N=$N and M=$M\n"
+echo "Running with N=$N and M=$M"
 for i in {1..10}
 do
-    echo "############ Iteration $i ############\n"
+    echo "############ Iteration $i ############"
     
     echo "	mpi"
     mpirun -hostfile hostfile mpi1 $N $M 0 res.txt >> "mpi1-$N-$M.txt" 
@@ -36,10 +36,10 @@ done
 N=1024
 M=16
 
-echo "Running with N=$N and M=$M\n"
+echo "Running with N=$N and M=$M"
 for i in {1..10}
 do
-    echo "############ Iteration $i ############\n"
+    echo "############ Iteration $i ############"
 
     echo "	mpi"
     mpirun -hostfile hostfile mpi1 $N $M 0 res.txt >> "mpi1-$N-$M.txt" 
@@ -60,10 +60,10 @@ done
 N=4096
 M=16
 
-echo "Running with N=$N and M=$M\n"
+echo "Running with N=$N and M=$M"
 for i in {1..10}
 do
-    echo "############ Iteration $i ############\n"
+    echo "############ Iteration $i ############"
 
     echo "	mpi"
     mpirun -hostfile hostfile mpi1 $N $M 0 res.txt >> "mpi1-$N-$M.txt" 
@@ -84,10 +84,10 @@ done
 N=256
 M=256
 
-echo "Running with N=$N and M=$M\n"
+echo "Running with N=$N and M=$M"
 for i in {1..10}
 do
-    echo "############ Iteration $i ############\n"
+    echo "############ Iteration $i ############"
 
     echo "	mpi"
     mpirun -hostfile hostfile mpi1 $N $M 0 res.txt >> "mpi1-$N-$M.txt" 
@@ -108,10 +108,10 @@ done
 N=1024
 M=256
 
-echo "Running with N=$N and M=$M\n"
+echo "Running with N=$N and M=$M"
 for i in {1..10}
 do
-    echo "############ Iteration $i ############\n"
+    echo "############ Iteration $i ############"
 
     echo "	mpi"
     mpirun -hostfile hostfile mpi1 $N $M 0 res.txt >> "mpi1-$N-$M.txt" 
@@ -132,10 +132,10 @@ done
 N=4096
 M=256
 
-echo "Running with N=$N and M=$M\n"
+echo "Running with N=$N and M=$M"
 for i in {1..10}
 do
-    echo "############ Iteration $i ############\n"
+    echo "############ Iteration $i ############"
 
     echo "	mpi"
     mpirun -hostfile hostfile mpi1 $N $M 0 res.txt >> "mpi1-$N-$M.txt" 
