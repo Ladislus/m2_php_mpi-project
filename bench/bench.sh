@@ -9,8 +9,8 @@ mpic++ -o rma_omp -fopenmp -I ../common/ ../rma_omp.cpp ../common/fonctions.cpp
 mpic++ -o master -I ../common/ ../master_slave/master.cpp ../common/fonctions.cpp 
 mpic++ -o slave -I ../common/ ../master_slave/slave.cpp ../common/fonctions.cpp 
 
-readonly N=256
-readonly M=16
+N=256
+M=16
 
 echo "Running with N=$N and M=$M\n"
 for i in {1..10}
@@ -33,8 +33,8 @@ do
     mpirun -np 1 -hostfile hostfile master $N $M 2 0 8 res.txt slave >> "ms-$N-$M.txt" 
 done
 
-$N=1024
-$M=16
+N=1024
+M=16
 
 echo "Running with N=$N and M=$M\n"
 for i in {1..10}
@@ -57,8 +57,8 @@ do
     mpirun -np 1 -hostfile hostfile master $N $M 2 0 8 res.txt slave >> "ms-$N-$M.txt" 
 done
 
-$N=4096
-$M=16
+N=4096
+M=16
 
 echo "Running with N=$N and M=$M\n"
 for i in {1..10}
@@ -81,8 +81,8 @@ do
     mpirun -np 1 -hostfile hostfile master $N $M 2 0 8 res.txt slave >> "ms-$N-$M.txt" 
 done
 
-$N=256
-$M=256
+N=256
+M=256
 
 echo "Running with N=$N and M=$M\n"
 for i in {1..10}
@@ -105,8 +105,8 @@ do
     mpirun -np 1 -hostfile hostfile master $N $M 2 0 8 res.txt slave >> "ms-$N-$M.txt" 
 done
 
-$N=1024
-$M=256
+N=1024
+M=256
 
 echo "Running with N=$N and M=$M\n"
 for i in {1..10}
@@ -129,8 +129,8 @@ do
     mpirun -np 1 -hostfile hostfile master $N $M 2 0 8 res.txt slave >> "ms-$N-$M.txt" 
 done
 
-$N=4096
-$M=256
+N=4096
+M=256
 
 echo "Running with N=$N and M=$M\n"
 for i in {1..10}
