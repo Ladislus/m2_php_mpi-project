@@ -1,6 +1,6 @@
 #ifndef MPI_PROJECT_CONFIG_H
 #define MPI_PROJECT_CONFIG_H
 
-#define VERBOSE 1
+#define VERBOSE @VERBOSE@
 
 #endif

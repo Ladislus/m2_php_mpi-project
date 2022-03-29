@@ -13,6 +13,13 @@ ADD_COMPILE_OPTIONS(-O3 -Wall -Wextra -pedantic)
 FILE(GLOB COMMON_FILES "common/*.cpp")
 INCLUDE_DIRECTORIES(common)
 
+OPTION(VERBOSE_FLAG "Enable verbose output" OFF)
+IF(VERBOSE_FLAG)
+    SET(VERBOSE 1)
+ELSE()
+    SET(VERBOSE 0)
+ENDIF()
+
 # Set the common parameters for the project
 SET(PROC_QUANTITY 6)
 SET(DEFAULT_ARGUMENTS 100 256 0 res.txt)
