@@ -2,25 +2,30 @@
 
 int main(int argc, char **argv) {
 
-    int provided;
+	// Init MPI With OpenMP Support (Not used in this version)
+	int provided;
     MPI_Init_thread(&argc, &argv, MPI_THREAD_MULTIPLE, &provided);
 
-    int pid, nprocs;
+	// Get the rank of the process
+	int pid, nprocs;
     MPI_Comm_rank(MPI_COMM_WORLD, &pid);
     MPI_Comm_size(MPI_COMM_WORLD, &nprocs);
 
-    const int n = atoi(argv[1]);
+	// Read arguments from CLI
+	const int n = atoi(argv[1]);
     const int m = atoi(argv[2]);
     const int root = atoi(argv[3]);
     assert(root < nprocs);
     const std::string name = argv[4];
 
-    const size_t nn = n * n;
+	// Define constants
+	const size_t nn = n * n;
     const size_t mn = m * n;
     const size_t data_size = sizeof(int);
 
     Time debut;
 
+	// Compute the number of vectors per process
     int count[nprocs];
     int displs[nprocs];
     const int qte = m / nprocs;
@@ -38,19 +43,24 @@ int main(int argc, char **argv) {
     int *batch = new int[count[pid]];
     int *vectors;
 
+	// Create the dynamic window
     long data_address = -1;
     MPI_Win window = nullptr;
     assert(MPI_Win_create_dynamic(MPI_INFO_NULL, MPI_COMM_WORLD, &window) == MPI_SUCCESS);
 
+	// Root process attach the data to the window
     if (pid == root) {
         assert(MPI_Win_attach(window, matrix, nn * data_size) == MPI_SUCCESS);
         MPI_Get_address(matrix, &data_address);
         assert(data_address >= 0);
     }
+	// Broadcast the data address to all processes for further use
     MPI_Bcast(&data_address, 1, MPI_LONG, root, MPI_COMM_WORLD);
 
-    std::fstream f;
+	// Root process generates the matrix & vectors
+	std::fstream f;
     if (pid == root) {
+		// Init the matrix
         srand(time(nullptr));
         for (size_t i = 0; i < nn; i++) matrix[i] = rand() % 20;
 
@@ -64,6 +74,7 @@ int main(int argc, char **argv) {
             }
         )
 
+		// Init the vectors
         vectors = new int[mn];
         for (size_t i = 0; i < m; i++) generate_vector(n, vectors + (i * n), rand() % (n / 2));
 
@@ -78,6 +89,7 @@ int main(int argc, char **argv) {
         )
     }
 
+	// Fence to wait for master to finish initialization
     MPI_Win_fence(MPI_MODE_NOPRECEDE, window);
 
     if (pid != root) {
@@ -87,14 +99,17 @@ int main(int argc, char **argv) {
         MPI_Win_unlock(root, window);
     }
 
+	// Fence to wait for threads to finish reading the matrix
     MPI_Win_fence(0, window);
 
+	// Root process detach from matrix & attach to vectors
     if (pid == root) {
         MPI_Win_detach(window, matrix);
         assert(MPI_Win_attach(window, vectors, mn * data_size) == MPI_SUCCESS);
         MPI_Get_address(vectors, &data_address);
         assert(data_address >= 0);
     }
+	// Broadcast the data address to all processes for further use
     MPI_Bcast(&data_address, 1, MPI_LONG, root, MPI_COMM_WORLD);
 
     if (pid != root) {
@@ -115,18 +130,23 @@ int main(int argc, char **argv) {
         }
     )
 
+	// Fence to wait for threads to finish reading the vectors
     MPI_Win_fence(0, window);
 
-    if (pid == root) debut = NOW;
+	// Save the starting time
+	if (pid == root) debut = NOW;
 
-    for (size_t i = 0; i < sz; ++i) {
+	// Compute the dot product of the vectors and the matrix
+	for (size_t i = 0; i < sz; ++i) {
         int result[n];
         matrix_vector(n, matrix, batch + (i * n), result);
         memcpy(batch + (i * n), result, n * data_size);
     }
 
+	// Fence to wait for threads to finish computing the dot product
     MPI_Win_fence(0, window);
 
+	// Threads send the result to the master
     if (pid != root) {
         MPI_Win_lock(MPI_LOCK_EXCLUSIVE, root, 0, window);
         MPI_Put(batch, count[pid], MPI_INT, root, data_address + displs[pid] * data_size, count[pid], MPI_INT, window);
@@ -134,15 +154,20 @@ int main(int argc, char **argv) {
     } else
         memcpy(vectors + displs[pid] * data_size, batch, count[pid] * data_size);
 
+	// Fence to wait for threads to finish writing the result to master
     MPI_Win_fence(0, window);
 
-    if (pid == root) {
+	// Root process output process time
+	if (pid == root) {
         std::chrono::duration<double> elapsed_seconds = NOW - debut;
-        std::cout << "Temps d'exécution: " << elapsed_seconds.count() << "s" << std::endl;
+        std::cout << "Time: " << elapsed_seconds.count() << "s" << std::endl;
     }
 
+	// Fence to wait for master to finish outputing the time
+	// Most likely useless
     MPI_Win_fence(MPI_MODE_NOSUCCEED, window);
 
+	// Root write the result to file
     if (pid == root) {
         f.open(name, std::fstream::out);
 
@@ -166,6 +191,7 @@ int main(int argc, char **argv) {
         )
     }
 
+	// Finalize MPI & free memory
     MPI_Win_free(&window);
     MPI_Finalize();
 

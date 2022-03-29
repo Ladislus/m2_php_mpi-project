@@ -100,7 +100,7 @@ int main(int argc, char **argv) {
 
     if (pid == root) {
         std::chrono::duration<double> elapsed_seconds = NOW - debut;
-        std::cout << "Temps d'exécution: " << elapsed_seconds.count() << "s" << std::endl;
+        std::cout << "Time: " << elapsed_seconds.count() << "s" << std::endl;
     }
 
     if (pid == root) {

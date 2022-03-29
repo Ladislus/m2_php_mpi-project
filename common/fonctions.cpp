@@ -14,6 +14,7 @@ void matrix_vector(size_t size, const int* const matrix, const int* const vector
     }
 }
 
+// Copy of "matrix_vector" but with an OMP parallel for
 void matrix_vector_omp(size_t size, const int* const matrix, const int* const vector, int* const output) {
     int index = 0;
     while (vector[index] == 0) ++index;

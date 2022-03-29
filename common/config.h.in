@@ -1,6 +1,7 @@
 #ifndef MPI_PROJECT_CONFIG_H
 #define MPI_PROJECT_CONFIG_H
 
+// Define by the CMake VERBOSE_FLAG option (default is off)
 #define VERBOSE @VERBOSE@
 
 #endif

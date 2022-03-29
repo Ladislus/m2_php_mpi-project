@@ -52,9 +52,10 @@ int main(int argc, char **argv) {
         std::clog << "[M" << pid << "] merging comm" << std::endl
     )
 
-    // FIXME: Infinite wait here, should match slave.cpp:39
+    // FIXME: Infinite wait here, should match slave.cpp:32
     // Depending on which PC (and thus maybe which MPI implementation) I use, it might or might not work
-    MPI_Intercomm_merge(intercom, 0, &intracom);
+	// Solved: Bug in OpenMPI depending on the version -> Use OpenMPI >= 4.0.3
+	MPI_Intercomm_merge(intercom, 0, &intracom);
     MPI_Comm_rank(intracom, &intrapid);
 
     LOG(
@@ -77,6 +78,7 @@ int main(int argc, char **argv) {
         std::clog << "Broadcasting the matring to slaves" << std::endl
     )
 
+	// Broadcast matrix
     MPI_Bcast(matrix, nn, MPI_INT, root, intracom);
 
     LOG(
@@ -136,7 +138,7 @@ int main(int argc, char **argv) {
 
     // Display computation time
     std::chrono::duration<double> elapsed_seconds = NOW - debut;
-    std::cout << "Temps d'exécution: " << elapsed_seconds.count() << "s" << std::endl;
+    std::cout << "Time: " << elapsed_seconds.count() << "s" << std::endl;
 
     // Open provided file
     std::fstream f(name, std::fstream::out);
